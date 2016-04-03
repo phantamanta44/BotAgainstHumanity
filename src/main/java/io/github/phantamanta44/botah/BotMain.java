@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class BotMain {
 	
-	public static final LogWrapper logger = new LogWrapper("Sonar");
+	public static final LogWrapper logger = new LogWrapper("BotAH");
 	public static final IniConfig config = new IniConfig("botah.conf");
 	
 	private static final File ADMINS_FILE = new File("admins.txt");
