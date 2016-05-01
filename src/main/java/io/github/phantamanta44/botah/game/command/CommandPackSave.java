@@ -3,42 +3,44 @@ package io.github.phantamanta44.botah.game.command;
 import io.github.phantamanta44.botah.BotMain;
 import io.github.phantamanta44.botah.core.command.ICommand;
 import io.github.phantamanta44.botah.core.context.IEventContext;
-import io.github.phantamanta44.botah.game.deck.DeckManager;
 import io.github.phantamanta44.botah.game.GameManager;
+import io.github.phantamanta44.botah.game.deck.Deck;
+import io.github.phantamanta44.botah.game.deck.DeckManager;
+import io.github.phantamanta44.botah.game.deck.PackRegistry;
+import io.github.phantamanta44.botah.util.MessageUtils;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class CommandLsDeck implements ICommand {
-
-	private static final List<String> ALIASES = Arrays.asList("decks", "listdecks");
+public class CommandPackSave implements ICommand {
 
 	@Override
 	public String getName() {
-		return "lsdeck";
+		return "pmsave";
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return ALIASES;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public String getDesc() {
-		return "Lists decks.";
+		return "Save the current card packs as a set.";
 	}
 
 	@Override
 	public String getUsage() {
-		return "lsdeck";
+		return "pmsave <name>";
 	}
 
 	@Override
 	public void execute(IUser sender, String[] args, IEventContext ctx) {
 		if (GameManager.getChannel() == null) {
-			ctx.sendMessage("Bot is not bound to a channel!");
+			ctx.sendMessage("Bot isn't bound to a channel!", BotMain.getPrefix());
 			return;
 		}
 		IChannel chan = GameManager.getChannel();
@@ -46,9 +48,22 @@ public class CommandLsDeck implements ICommand {
 			ctx.sendMessage("Bot is currently bound to %s / %s!", chan.getGuild().getName(), chan.getName());
 			return;
 		}
-		ctx.sendMessage("__**Currently Loaded Decks:**__\n%s", DeckManager.getDecks().stream()
-				.map(d -> String.format("- %s", d.getName()))
-				.reduce((a, b) -> a.concat("\n").concat(b)).orElse("No decks loaded!"));
+		Collection<Deck> decks = DeckManager.getDecks();
+		if (decks.isEmpty()) {
+			ctx.sendMessage("No card packs found!");
+			return;
+		}
+
+		if (args.length < 1) {
+			ctx.sendMessage("You must specify a name for the set!");
+			return;
+		}
+
+		String name = MessageUtils.concat(args);
+		if (PackRegistry.register(name, decks))
+			ctx.sendMessage("Registered pack set '%s'.", name);
+		else
+			ctx.sendMessage("Card pack set already exists!");
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package io.github.phantamanta44.botah.game.command;
 import io.github.phantamanta44.botah.BotMain;
 import io.github.phantamanta44.botah.core.command.ICommand;
 import io.github.phantamanta44.botah.core.context.IEventContext;
-import io.github.phantamanta44.botah.game.DeckManager;
+import io.github.phantamanta44.botah.game.deck.DeckManager;
 import io.github.phantamanta44.botah.game.GameManager;
 import io.github.phantamanta44.botah.game.deck.Deck;
 import sx.blah.discord.handle.obj.IChannel;
@@ -53,9 +53,9 @@ public class CommandAddDeck implements ICommand {
 			ctx.sendMessage("You must specify a valid URL to a deck file!");
 			return;
 		}
-		for (int i = 0; i < args.length; i++) {
+		for (String arg : args) {
 			try {
-				Deck deck = DeckManager.loadDeck(args[i]);
+				Deck deck = DeckManager.loadDeck(arg);
 				DeckManager.addDeck(deck);
 				ctx.sendMessage("Loaded deck: %s", deck.getName());
 			} catch (Exception e) {

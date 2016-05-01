@@ -3,7 +3,7 @@ package io.github.phantamanta44.botah.game.command;
 import io.github.phantamanta44.botah.BotMain;
 import io.github.phantamanta44.botah.core.command.ICommand;
 import io.github.phantamanta44.botah.core.context.IEventContext;
-import io.github.phantamanta44.botah.game.DeckManager;
+import io.github.phantamanta44.botah.game.deck.DeckManager;
 import io.github.phantamanta44.botah.game.GameManager;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;

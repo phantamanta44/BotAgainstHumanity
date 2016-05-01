@@ -69,6 +69,15 @@ public class RateLimitedChannel implements IChannel {
 	}
 
 	@Override
+	public IMessage sendFile(File file, String s) throws IOException, MissingPermissionsException, DiscordException {
+		try {
+			return parent.sendFile(file, s);
+		} catch (HTTP429Exception ex) {
+			return queueBlocking(() -> sendFile(file, s), ex.getRetryDelay());
+		}
+	}
+
+	@Override
 	public IMessage sendFile(File file) throws IOException, MissingPermissionsException, DiscordException {
 		try {
 			return parent.sendFile(file);
@@ -138,6 +147,11 @@ public class RateLimitedChannel implements IChannel {
 	}
 
 	@Override
+	public IChannel copy() {
+		return new RateLimitedChannel(parent);
+	}
+
+	@Override
 	public IDiscordClient getClient() {
 		return parent.getClient();
 	}
@@ -187,16 +201,6 @@ public class RateLimitedChannel implements IChannel {
 	@Override
 	public boolean getTypingStatus() {
 		return parent.getTypingStatus();
-	}
-
-	@Override
-	public String getLastReadMessageID() {
-		return parent.getLastReadMessageID();
-	}
-
-	@Override
-	public IMessage getLastReadMessage() {
-		return parent.getLastReadMessage();
 	}
 
 	@Override

@@ -1,10 +1,8 @@
-package io.github.phantamanta44.botah.game;
+package io.github.phantamanta44.botah.game.deck;
 
 import com.github.fge.lambdas.Throwing;
 import io.github.phantamanta44.botah.BotMain;
 import io.github.phantamanta44.botah.core.ICTListener;
-import io.github.phantamanta44.botah.game.deck.BlackCard;
-import io.github.phantamanta44.botah.game.deck.Deck;
 import io.github.phantamanta44.botah.util.MessageUtils;
 import io.github.phantamanta44.botah.util.http.HttpException;
 import io.github.phantamanta44.botah.util.http.HttpUtils;
@@ -44,6 +42,10 @@ public class DeckManager implements ICTListener {
 
 	public static void addDeck(Deck deck) {
 		decks.put(deck.getName(), deck);
+	}
+
+	public static void addDecks(Collection<Deck> toAdd) {
+		toAdd.forEach(DeckManager::addDeck);
 	}
 
 	public static boolean removeDeck(String name) {
@@ -110,5 +112,5 @@ public class DeckManager implements ICTListener {
 	public static void removeCard(String card) {
 		deck.remove(card);
 	}
-	
+
 }

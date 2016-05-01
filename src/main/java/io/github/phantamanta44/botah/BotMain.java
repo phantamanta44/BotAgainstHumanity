@@ -1,15 +1,11 @@
 package io.github.phantamanta44.botah;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import io.github.phantamanta44.botah.core.EventDispatcher;
 import io.github.phantamanta44.botah.core.RevokeHandler;
 import io.github.phantamanta44.botah.core.command.*;
 import io.github.phantamanta44.botah.game.GameManager;
 import io.github.phantamanta44.botah.util.IniConfig;
-import io.github.phantamanta44.botah.util.LogWrapper;
-import org.slf4j.LoggerFactory;
-import sx.blah.discord.Discord4J;
+import io.github.phantamanta44.botah.util.http.log.LogWrapper;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.io.BufferedReader;
@@ -30,12 +26,11 @@ public class BotMain {
 
 	public static void main(String[] args) {
 		try {
-			((Logger)LoggerFactory.getLogger(Discord4J.class)).setLevel(Level.INFO);
 			config.read();
 			setPrefix(config.get("prefix"));
 			getAdmins();
 			Discord.getInstance()
-					.buildClient(config.get("email"), config.get("pass"))
+					.buildClient(config.get("token"))
 					.onReady(BotMain::registerListeners)
 					.login();
 		} catch (Exception e) {

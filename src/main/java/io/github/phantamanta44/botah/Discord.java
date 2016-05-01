@@ -40,10 +40,10 @@ public class Discord {
 				.construct();
 	}
 	
-	public Discord buildClient(String email, String pass) throws DiscordException {
+	public Discord buildClient(String token) throws DiscordException {
 		BotMain.logger.info("Building Discord API...");
 		ClientBuilder cb = new ClientBuilder();
-		dcCli = cb.withLogin(email, pass).build();
+		dcCli = cb.withToken(token).build();
 		registerListener(this);
 		registerListener(new EventDispatcher());
 		EventDispatcher.registerHandler(new CommandDispatcher());
@@ -67,7 +67,8 @@ public class Discord {
 	@EventSubscriber
 	public void onReady(ReadyEvent event) {
 		readyCb.run();
-		BotMain.logger.info("Logged in as \"%s\". Token: %s", dcCli.getOurUser().getName(), dcCli.getToken());
+		BotMain.logger.info("Logged in as %s#%s. ID: %s", dcCli.getOurUser().getName(),
+				dcCli.getOurUser().getDiscriminator(), dcCli.getOurUser().getID());
 		setGameCaption(BotMain.config.get("game"));
 	}
 	
@@ -80,7 +81,7 @@ public class Discord {
 	}
 	
 	private void attemptReconnect(long delay) {
-		if (!dcCli.isReady())
+		if (!dcCli.isReady()) {
 			taskPool.schedule(() -> {
 				try {
 					Discord.getInstance().dcCli.login();
@@ -90,6 +91,7 @@ public class Discord {
 					Discord.getInstance().attemptReconnect(15000L);
 				}
 			}, delay, TimeUnit.MILLISECONDS);
+		}
 	}
 	
 	public IUser getBot() {

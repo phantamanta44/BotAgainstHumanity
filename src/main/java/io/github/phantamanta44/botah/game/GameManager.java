@@ -8,6 +8,8 @@ import io.github.phantamanta44.botah.core.context.IEventContext;
 import io.github.phantamanta44.botah.core.rate.RateLimitedChannel;
 import io.github.phantamanta44.botah.game.command.*;
 import io.github.phantamanta44.botah.game.deck.BlackCard;
+import io.github.phantamanta44.botah.game.deck.DeckManager;
+import io.github.phantamanta44.botah.game.deck.PackRegistry;
 import io.github.phantamanta44.botah.util.MessageUtils;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -43,6 +45,13 @@ public class GameManager {
 		CommandDispatcher.registerCommand(new CommandLsDeck());
 		CommandDispatcher.registerCommand(new CommandAddDeck());
 		CommandDispatcher.registerCommand(new CommandRmDeck());
+		CommandDispatcher.registerCommand(new CommandPackApply());
+		CommandDispatcher.registerCommand(new CommandPackDelete());
+		CommandDispatcher.registerCommand(new CommandPackList());
+		CommandDispatcher.registerCommand(new CommandPackSave());
+		CommandDispatcher.registerCommand(new CommandPackReload());
+
+		PackRegistry.load();
 	}
 
 	public static void setChannel(IChannel chan) {
