@@ -6,6 +6,7 @@ import io.github.phantamanta44.botah.core.command.*;
 import io.github.phantamanta44.botah.game.GameManager;
 import io.github.phantamanta44.botah.util.IniConfig;
 import io.github.phantamanta44.botah.util.http.log.LogWrapper;
+import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.io.BufferedReader;
@@ -14,6 +15,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import static io.github.phantamanta44.botah.Discord.instance;
 
 public class BotMain {
 	
@@ -29,10 +32,8 @@ public class BotMain {
 			config.read();
 			setPrefix(config.get("prefix"));
 			getAdmins();
-			Discord.getInstance()
-					.buildClient(config.get("token"))
-					.onReady(BotMain::registerListeners)
-					.login();
+			instance = new ClientBuilder().withToken("MTc0NjM4NTM1NTUzMzE4OTIx.Cgc4dA.9AEpd8nSkhIRQzAFar1nTFwpYYI").login();
+			registerListeners();
 		} catch (Exception e) {
 			logger.severe("Something went wrong!");
 			e.printStackTrace();

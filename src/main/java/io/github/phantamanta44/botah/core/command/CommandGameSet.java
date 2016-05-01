@@ -8,6 +8,9 @@ import sx.blah.discord.handle.obj.IUser;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import static io.github.phantamanta44.botah.Discord.instance;
 
 public class CommandGameSet implements ICommand {
 
@@ -34,9 +37,9 @@ public class CommandGameSet implements ICommand {
 	@Override
 	public void execute(IUser sender, String[] args, IEventContext ctx) {
 		if (args.length < 2)
-			Discord.getInstance().setGameCaption(null);
+			instance.updatePresence(false, null);
 		else
-			Discord.getInstance().setGameCaption(MessageUtils.concat(args));
+			Discord.getInstance().updatePresence(false, Optional.of(MessageUtils.concat(args)));
 	}
 
 	@Override

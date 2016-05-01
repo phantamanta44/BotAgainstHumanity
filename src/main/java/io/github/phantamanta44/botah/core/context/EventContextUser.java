@@ -7,6 +7,8 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.HTTP429Exception;
 
 public class EventContextUser implements IEventContext {
 
@@ -22,7 +24,11 @@ public class EventContextUser implements IEventContext {
 	
 	@Override
 	public void sendMessage(String msg) {
-		MessageUtils.sendMessage(Discord.getInstance().getPrivateChat(user), msg);
+		try {
+			MessageUtils.sendMessage(Discord.getInstance().getOrCreatePMChannel(user), msg);
+		} catch (DiscordException | HTTP429Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

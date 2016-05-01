@@ -20,7 +20,7 @@ public class RevokeHandler implements ICTListener {
 	
 	@ICTListener.ListenTo
 	public void onMessageSend(MessageSendEvent event, IEventContext ctx) {
-		if (ctx.getUser().getID().equalsIgnoreCase(Discord.getInstance().getBot().getID())) {
+		if (ctx.getUser().getID().equalsIgnoreCase(Discord.getInstance().getOurUser().getID())) {
 			String id = ctx.getChannel().getID();
 			if (!msgStacks.containsKey(id))
 				msgStacks.put(id, new ConcurrentLinkedDeque<>());
