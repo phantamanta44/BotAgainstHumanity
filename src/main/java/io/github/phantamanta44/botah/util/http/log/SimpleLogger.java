@@ -43,7 +43,7 @@ public class SimpleLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void trace(String msg, Throwable t) {
-		print(format("%s (%s)", msg, t.getMessage()), SimpleLogLevel.TRACE);
+		print(format("{} ({})", msg, t.getMessage()), SimpleLogLevel.TRACE);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class SimpleLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void debug(String msg, Throwable t) {
-		print(format("%s (%s)", msg, t.getMessage()), SimpleLogLevel.DEBUG);
+		print(format("{} ({})", msg, t.getMessage()), SimpleLogLevel.DEBUG);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class SimpleLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void info(String msg, Throwable t) {
-		print(format("%s (%s)", msg, t.getMessage()), SimpleLogLevel.INFO);
+		print(format("{} ({})", msg, t.getMessage()), SimpleLogLevel.INFO);
 	}
 
 	@Override
@@ -133,7 +133,8 @@ public class SimpleLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void warn(String msg, Throwable t) {
-		print(format("%s (%s)", msg, t.getMessage()), SimpleLogLevel.WARN);
+		print(format("{} ({})", msg, t.getMessage()), SimpleLogLevel.WARN);
+		t.printStackTrace();
 	}
 
 	@Override
@@ -163,7 +164,8 @@ public class SimpleLogger extends MarkerIgnoringBase {
 
 	@Override
 	public void error(String msg, Throwable t) {
-		print(format("%s (%s)", msg, t.getMessage()), SimpleLogLevel.ERROR);
+		print(format("{} ({})", msg, t.getMessage()), SimpleLogLevel.ERROR);
+		t.printStackTrace();
 	}
 
 	private void print(String msg, SimpleLogLevel level) {
@@ -175,8 +177,14 @@ public class SimpleLogger extends MarkerIgnoringBase {
 		String format = formatArg;
 		int ind, i = 0;
 		while ((ind = format.indexOf("{}")) != -1 && i < args.length)
-			format = format.substring(0, ind).concat(args[i++].toString()).concat(format.substring(ind + 2, format.length()));
+			format = format.substring(0, ind).concat(resolve(args[i++])).concat(format.substring(ind + 2, format.length()));
 		return format;
+	}
+
+	private static String resolve(Object o) {
+		if (o == null)
+			return "<null>";
+		return o.toString();
 	}
 
 	private enum SimpleLogLevel {

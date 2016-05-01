@@ -75,7 +75,7 @@ public class Discord {
 	@EventSubscriber
 	public void onDisconnect(DiscordDisconnectedEvent event) {
 		if (event.getReason() != Reason.LOGGED_OUT) {
-			BotMain.logger.warn("Disconnected from Discord! Attempting to reconnect...");
+			BotMain.logger.warn("Disconnected from Discord: %s", event.getReason());
 			attemptReconnect(0L);
 		}
 	}
