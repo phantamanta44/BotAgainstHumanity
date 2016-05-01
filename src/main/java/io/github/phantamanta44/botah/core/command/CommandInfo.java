@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import static io.github.phantamanta44.botah.Discord.instance;
+
 public class CommandInfo implements ICommand {
 
 	private static final List<String> ALIASES = Arrays.asList("uptime", "about", "stats");
@@ -41,8 +43,8 @@ public class CommandInfo implements ICommand {
 		List<Entry<String, Object>> info = new ArrayList<>();
 		info.add(new SimpleEntry<>("Uptime", MessageUtils.formatDuration(ManagementFactory.getRuntimeMXBean().getUptime())));
 		info.add(new SimpleEntry<>("Servers", Discord.getInstance().getGuilds().size()));
-		info.add(new SimpleEntry<>("Channels", Discord.getInstance().getChannels().size()));
-		info.add(new SimpleEntry<>("Users", Discord.getInstance().getUsers().size()));
+		info.add(new SimpleEntry<>("Channels", Discord.getInstance().getChannels(true).size()));
+		//info.add(new SimpleEntry<>("Users", Discord.getInstance().getUsers().size()));
 		Runtime rt = Runtime.getRuntime();
 		info.add(new SimpleEntry<>("Used Mem", String.format("%.2f/%.2fMB", (rt.totalMemory() - rt.freeMemory()) / 1000000F, rt.totalMemory() / 1000000F)));
 		String infoStr = info.stream()

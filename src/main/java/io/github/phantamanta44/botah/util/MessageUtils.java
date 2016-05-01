@@ -8,6 +8,8 @@ import sx.blah.discord.handle.obj.IUser;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import static io.github.phantamanta44.botah.Discord.instance;
+
 public class MessageUtils {
 	
 	public static String concat(String[] parts) {
@@ -30,7 +32,7 @@ public class MessageUtils {
 	public static IUser resolveMention(String men) {
 		if (!men.matches("<@\\S+>"))
 			return null;
-		return Discord.getInstance().getUserById(men.substring(2, men.length() - 1));
+		return instance.getUserByID(men.substring(2, men.length() - 1));
 	}
 	
 	public static String formatDuration(long time) {

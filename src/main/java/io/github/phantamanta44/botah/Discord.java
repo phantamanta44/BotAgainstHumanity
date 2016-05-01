@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 
 public class Discord {
 	
-	private static final Discord instance = new Discord();
+	public static IDiscordClient instance = null;
 	private static ScheduledExecutorService taskPool;
 	
-	public static Discord getInstance() {
+	public static IDiscordClient getInstance() {
 		return instance;
 	}
 	
@@ -84,11 +84,11 @@ public class Discord {
 		if (!dcCli.isReady()) {
 			taskPool.schedule(() -> {
 				try {
-					Discord.getInstance().dcCli.login();
+					instance = new ClientBuilder().withToken("MTc0NjM4NTM1NTUzMzE4OTIx.Cgc4dA.9AEpd8nSkhIRQzAFar1nTFwpYYI").login();
 				} catch (Exception e) {
 					BotMain.logger.warn("Could not reconnect: %s", e.getMessage());
 					BotMain.logger.warn("Trying again in 15 seconds...");
-					Discord.getInstance().attemptReconnect(15000L);
+					attemptReconnect(15000L);
 				}
 			}, delay, TimeUnit.MILLISECONDS);
 		}

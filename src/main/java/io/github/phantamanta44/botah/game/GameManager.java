@@ -14,6 +14,8 @@ import io.github.phantamanta44.botah.util.MessageUtils;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.HTTP429Exception;
 
 import java.util.Arrays;
 import java.util.List;
@@ -132,7 +134,12 @@ public class GameManager {
 		for (int i = 0; i < players.length; i++) {
 			if (i == ind)
 				continue;
-			IChannel pm = new RateLimitedChannel(Discord.getInstance().getPrivateChat(players[i]));
+			IChannel pm = null;
+			try {
+				pm = new RateLimitedChannel(Discord.getInstance().getOrCreatePMChannel(players[i]));
+			} catch (DiscordException | HTTP429Exception e) {
+				e.printStackTrace();
+			}
 			MessageUtils.sendMessage(pm, "`%s`\n\n__**Your Hand**__\n%s\n*(Pick %d card(s)) *", blackCard.text, hands[i], blackCard.pick);
 		}
 	}

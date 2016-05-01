@@ -19,6 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static io.github.phantamanta44.botah.Discord.instance;
+
 public class CommandDispatcher implements ICTListener {
 	
 	private static final Map<String, ICommand> cmdMapping = new ConcurrentHashMap<>();
@@ -74,7 +76,7 @@ public class CommandDispatcher implements ICTListener {
 	
 	@ListenTo
 	public void onMention(MentionEvent event, IEventContext ctx) {
-		String msg = event.getMessage().getContent(), men = Discord.getInstance().getBot().mention();
+		String msg = event.getMessage().getContent(), men = instance.getOurUser().mention();
 		IUser sender = event.getMessage().getAuthor();
 		if (!msg.startsWith(men) && !msg.endsWith(men))
 			return;
